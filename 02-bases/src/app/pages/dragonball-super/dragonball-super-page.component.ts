@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CharacterListComponent } from "../../components/dragonball/character-list/character-list.component";
+import { DragonballCharacterAddComponent } from "../../components/dragonball/dragonball-character-add/dragonball-character-add.component";
+import { DragonballService } from '../../services/dragonball.service';
 
 interface Character {
   id: number
@@ -8,33 +10,11 @@ interface Character {
 }
 
 @Component({
-  imports: [CharacterListComponent],
+  imports: [CharacterListComponent, DragonballCharacterAddComponent],
   templateUrl: './dragonball-super-page.component.html',
 })
 export class DragonballSuperPageComponent {
-  name = signal('')
-  power = signal(0)
+  public dragonballService = inject(DragonballService)
 
-  characters = signal<Character[]>([
-    { id: 1, name: 'Goku',  power: 9000 },
-    { id: 2, name: 'Vegetta',  power: 8000 },
-  ])
 
-  addCharacter({ name, power }: Partial<Character>) {
-    if (!name || !power) return
-
-    const newCharacter: Character = {
-      id: this.characters().length + 1,
-      name,
-      power
-    }
-
-    this.characters.update(characters => [...characters, newCharacter])
-    this.resetFields()
-  }
-
-  resetFields() {
-    this.name.set('')
-    this.power.set(0)
-  }
 }
